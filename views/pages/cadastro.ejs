@@ -8,6 +8,15 @@
 Página CADASTRO <br></center>
 
 <%- include ("../partials/menu")%>
+<main>
+    <form action="/cadastro" method="post" class="formItens">
+      Seu nome:
+      <input type="text" name="username" id="username" placeholder="Cadastre seu nome de usuário"><br>
+      Senha:
+      <input type="password" name="password" id="senha" placeholder="Cadastre sua senha"><br>
+      <button type="submit">Cadastrar</button>
+    </form>
+</main>
 <%- include ("../partials/footer")%>
 </body>
 
