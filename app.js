@@ -1,5 +1,7 @@
 const express = require("express");
 
+const session = require("express-session");
+
 const app = express();
 
 const sqlite3 = require("sqlite3");
@@ -14,6 +16,14 @@ db.serialize(() => {
     )
 })
 
+app.use(
+    session({
+        secret: "senhaforte",
+        resave: true,
+        saveUninitialized: true,
+    })
+);
+
 app.set("view engine", "ejs");
 
 
@@ -27,23 +37,30 @@ app.use(express.urlencoded({ extended: true })); // versão EXPRESS >= 5.x.x
 app.set('view engine', 'ejs');
 
 app.get("/index", (req, res) => {
-    res.render("pages/index");
+    res.render("pages/index", { título: "index" });
     console.log("GET / index");
 });
 
 //Exercício, criar uma rota para a página Sobre
 app.get("/sobre", (req, res) => {
-    res.render("pages/sobre");
+    res.render("pages/sobre", { título: "sobre" });
     console.log("GET / sobre");
 });
 
 app.get("/cadastro", (req, res) => {
-    res.render("pages/cadastro");
+    res.render("pages/cadastro", { título: "cadastro" });
     console.log("GET / cadastro");
 });
 
+app.get("/logout", (req, res) => {
+    console.log("GET /logout");
+    req.session.destroy(() => {
+        res.redirect("/login");
+    });
+});
+
 app.get("/login", (req, res) => {
-    res.render("pages/login");
+    res.render("pages/login", { título: "login" });
     console.log("GET / login");
 });
 
@@ -57,7 +74,8 @@ app.post("/login", (req, res) => {
     const query = "SELECT * FROM users WHERE username=? AND password=?"
     db.get(query, [username, password], (err) => {
         if (err) throw err;
-
+        req.session.username = username;
+        req.session.loggedin = true;
         res.redirect("/dashboard")
     })
 
@@ -66,9 +84,22 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/dashboard", (req, res) => {
-    res.render("pages/dashboard");
+    //res.render("pages/dashboard", { título: "dashboard" });
     console.log("GET / dashboard");
+
+    if (req.session.loggedin) {
+        //Listar todos os usuários
+        const query = "SELECT * FROM users";
+        db.all(query, [], (err, row) => {
+            if (err) throw err;
+            //renderiza a página dashboard com a lista de usuário coletada do BD pelo SELECT
+            res.render("pages/dashboard", { título: "Tabela de usuário", dados: row });
+        });
+    } else {
+        res.send("Usuário não logado");
+    }
 });
+
 
 app.listen(4000, () => {
     console.log(`Servidor NODEjs ativo na porta 4000`);
