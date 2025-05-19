@@ -3,21 +3,26 @@
 
 <%- include ("../partials/head")%>
 
-<body>
-<%- include ("../partials/menu")%>
-<main>
-  <center><br><br><br><br><br><br><br><br><br>
-    <form action="/login" method="post" class="formItens">
-      Seu nome:
-      <input type="text" name="username" id="username" placeholder="Digite seu nome de usuário"><br>
-      Senha:
-      <input type="password" name="password" id="senha" placeholder="Digite sua senha"><br>
-      <button type="submit">Entrar</button>
-    </form>
-    </center>
-</main>
-    <%- include ("../partials/footer")%>
+  <body>
+    <%- include ("../partials/menu")%>
+      <main>
+        <br><br>
+        <center><h1>LOGIN</h1></center>
+        <center><br>
+          <form action="/login" method="post" class="formItens">
+            Nome:
+            <input type="text" name="username" id="username" placeholder="Digite seu nome de usuário"><br>
+            Senha:
+            <input type="password" name="password" id="senha" placeholder="Digite sua senha"><br><br><br>
+            <button type="submit">Entrar</button>
+          </form>
+          <br>
+    <a href="cadastro"> Não tenho login</a>
+        </center>
+      </main><br><br><br><br><br>
+      <%- include ("../partials/footer")%>
 
-    
-</body>
+
+  </body>
+
 </html>

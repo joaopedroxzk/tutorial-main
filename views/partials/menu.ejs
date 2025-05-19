@@ -2,14 +2,14 @@
     <nav>
         <center>
         <ul>
-        <li><a href="/index">Ir para a página INDEX</a></li>
-        <li><a href="/sobre">Ir para a página SOBRE</a></li>
+        <li><a href="/"><input type="button" value="HOME"></a></li>
+        <li><a href="/sobre"><input type="button" value="SOBRE"></a></li>
         <% if(!req.session.loggedin) { %>
-            <li><a href="/cadastro">Ir para a página CADASTRO</a></li>
-            <li><a href="/login">Ir para a página LOGIN</a></li>
+            <li><a href="/cadastro"><input type="button" value="CADASTRO"></a></li>
+            <li><a href="/login"><input type="button" value="LOGIN"></a></li>
             <% } else { %>
-                <li><a href="/dashboard">Ir para a página DASHBOARD</a></li>
-                <a href="/logout">Fazer LOGOUT</a>
+                <li><a href="/dashboard"><input type="button" value="DASHBOARD"></a></li>
+                <a href="/logout"><input type="button" value="LOGOUT"></a>
                 <br>
                 <% } %>
         </ul>
