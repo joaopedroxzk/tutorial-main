@@ -1,24 +1,38 @@
 <%- console.log(JSON.stringify(dados)) %>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Senha</th>
-    </tr>
-</thead>
-    <tbody>
-        <% let i; for(i=0; i< dados.length; i++) { %>
-            <tr>
-                <td><%= dados [i].id %></td>
-                <td><%= dados [i].username %></td>
-                <td><%= dados [i].password %></td>
-            </tr>
-        <% } %>
-    </tbody>
-    <tfoot>
-        <tr><td colspan="3">
-            <%= `Qntde de registros ${i}` %>
-        </td></tr>
-    </tfoot>
-</table>
+    <%- console.log(JSON.stringify(req.session)) %>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Senha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% let i; for(i=0; i< dados.length; i++) { %>
+                    <% if (dados [i].username==req.session.username) {%>
+                        <tr style="background-color: blue; color: white;">
+                            <%} else {%>
+                        <tr>
+                            <% }%>
+                                <td>
+                                    <%= dados [i].id %>
+                                </td>
+                                <td>
+                                    <%= dados [i].username %>
+                                </td>
+                                <td>
+                                    <%= dados [i].password %>
+                                </td>
+                        </tr>
+                        <% } %>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        <%= `Qntde de registros ${i}` %>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>

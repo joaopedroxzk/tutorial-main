@@ -37,18 +37,18 @@ app.use(express.urlencoded({ extended: true })); // versão EXPRESS >= 5.x.x
 app.set('view engine', 'ejs');
 
 app.get("/index", (req, res) => {
-    res.render("pages/index", { título: "index" });
+    res.render("pages/index", { título: "index", req: req });
     console.log("GET / index");
 });
 
 //Exercício, criar uma rota para a página Sobre
 app.get("/sobre", (req, res) => {
-    res.render("pages/sobre", { título: "sobre" });
+    res.render("pages/sobre", { título: "sobre", req: req });
     console.log("GET / sobre");
 });
 
 app.get("/cadastro", (req, res) => {
-    res.render("pages/cadastro", { título: "cadastro" });
+    res.render("pages/cadastro", { título: "cadastro", req: req });
     console.log("GET / cadastro");
 });
 
@@ -60,7 +60,7 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    res.render("pages/login", { título: "login" });
+    res.render("pages/login", { título: "login", req: req});
     console.log("GET / login");
 });
 
@@ -93,7 +93,7 @@ app.get("/dashboard", (req, res) => {
         db.all(query, [], (err, row) => {
             if (err) throw err;
             //renderiza a página dashboard com a lista de usuário coletada do BD pelo SELECT
-            res.render("pages/dashboard", { título: "Tabela de usuário", dados: row });
+            res.render("pages/dashboard", { título: "Tabela de usuário", dados: row, req:req });
         });
     } else {
         res.send("Usuário não logado");

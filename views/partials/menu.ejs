@@ -1,20 +1,18 @@
 <header>
-<nav>
-
-    
-    <a href="/index">Ir para a página INDEX</a>
-    <br>
-    <a href="/dashboard">Ir para a página DASHBOARD</a>
-    <br>
-    <a href="/sobre">Ir para a página SOBRE</a>
-    <br>
-    <a href="/login">Ir para a página LOGIN</a>
-    <br>
-    <a href="/cadastro">Ir para a página CADASTRO</a>
-    <br>
-    <a href="/logout">Fazer LOGOUT</a>
-    <br> <br> <br>
-    <img src='./static/pesca.jfif' a href/>
-
-</nav>
+    <nav>
+        <center>
+        <ul>
+        <li><a href="/index">Ir para a página INDEX</a></li>
+        <li><a href="/sobre">Ir para a página SOBRE</a></li>
+        <% if(!req.session.loggedin) { %>
+            <li><a href="/cadastro">Ir para a página CADASTRO</a></li>
+            <li><a href="/login">Ir para a página LOGIN</a></li>
+            <% } else { %>
+                <li><a href="/dashboard">Ir para a página DASHBOARD</a></li>
+                <a href="/logout">Fazer LOGOUT</a>
+                <br>
+                <% } %>
+        </ul>
+        </center>
+    </nav>
 </header>
