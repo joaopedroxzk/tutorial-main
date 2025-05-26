@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("../partials/head"); %>
+
+
+    <body>
+
+    <%- include ("../partials/menu")%><br><br>
+        <center>
+            <main>
+                <form action="/post_create" method="post">
+                    <label for="título">Título:</label>
+                    <input type="text" id="título" name="título" required /><br><br>
+                    <label for="conteudo">Conteúdo:</label><br>
+                    <textarea id="conteudo" name="conteudo" rows="10" cols="70"></textarea><br><br>
+
+                    <button type="submit">Criar postagem</button>
+                </form>
+            </main>
+            </center>
+            <%- include("../partials/footer"); %>
+    </body>
+</html>

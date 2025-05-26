@@ -3,13 +3,15 @@ const session = require("express-session");
 const app = express();
 const sqlite3 = require("sqlite3");
 
-
 // Conexão com o banco de dados
 const db = new sqlite3.Database("users.db");
 
 db.serialize(() => {
     db.run(
         "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)"
+    )
+    db.run(
+        "CREATE TABLE IF NOT EXISTS posts(id INTEGER PRIMARY KEY AUTOINCREMENT, id_users INTEGER, titulo TEXT, conteudo TEXT, data_criacao TEXT)"
     )
 })
 
@@ -28,14 +30,47 @@ app.use('/static', express.static(__dirname + '/static'));
 // Configuração do Express para processar requisições POST com BODY PARAMETERS
 app.use(express.urlencoded({ extended: true })); // versão EXPRESS >= 5.x.x
 
-app.set('view engine', 'ejs');
 
 app.get("/", (req, res) => {
     console.log("GET /");
     res.render("pages/index", { título: "index", req: req });
 });
 
-//Exercício, criar uma rota para a página Sobre
+app.get("/post_create", (req, res) => {
+    console.log("Get /post_create");
+        // verificar se o usuário está logado
+    if (req.session.loggedin) {
+        // Se estiver logado, crie post
+        res.render("pages/post_form", {título: "Criar postagem", req: req});
+    } else {
+        // Se não estiver logado, redirect para /nao-autorizado
+        res.redirect("/nao-autorizado");
+    }
+});
+
+app.post("/post_create", (req, res) => {
+    console.log("Get /post_create");
+    if(req.session.loggedin) {
+        console.log("Dados da postagem: ", req.body);
+        const { titulo,conteudo} = req.body;
+        const data_criacao = new Date();
+        const data = data_criacao.toLocaleDateString();
+        console.log("Username ", req.session.username, " id_username: ", req.session.id_username,
+            " id_username: ", req.session.id_username);
+
+        const query = "INSERT INTO posts (id_users, titulo, conteudo, data_criacao) VALUES (?, ?, ?, ?)"
+        
+        db.get(query, [req.session.id_username, titulo, conteudo, data], (err) => {
+            if(err) throw err;
+            res.send('Post criado');
+        })
+
+    } else {
+        res.redirect("/nao-autorizado");
+    }
+    
+})
+
 app.get("/sobre", (req, res) => {
     console.log("GET / sobre");
     res.render("pages/sobre", { título: "sobre", req: req });
@@ -57,23 +92,26 @@ app.get("/login", (req, res) => {
     console.log("GET / login");
     res.render("pages/login", { título: "login", req: req });
 });
+
 app.get("/nao-autorizado", (req, res) => {
     console.log("GET / nao-autorizado");
     res.render("pages/nao-autorizado", { título: "nao-autorizado", req: req });
 });
+
 app.get("/usuario-cadastrado", (req, res) => {
     console.log("GET / usuario-cadastrado");
     res.render("pages/usuario-cadastrado", { título: "usuario-cadastrado", req: req });
 });
+
 app.get("/usuario-invalido", (req, res) => {
     console.log("GET / usuario-invalido");
     res.render("pages/usuario-invalido", { título: "usuario-invalido", req: req });
 });
+
 app.get("/cadastrado-sucesso", (req, res) => {
     console.log("GET / cadastrado-sucesso");
     res.render("pages/cadastrado-sucesso", { título: "cadastrado-sucesso", req: req });
 });
-
 
 //Rota /login para processamento dos dados do formulário do LOGIN no cliente
 app.post("/login", (req, res) => {
@@ -90,6 +128,7 @@ app.post("/login", (req, res) => {
             console.log("criando sessão")
             req.session.username = username;
             req.session.loggedin = true;
+            req.session.id_username = row.id;
             res.redirect("/dashboard")
         } else {
             res.redirect("/usuario-invalido");
